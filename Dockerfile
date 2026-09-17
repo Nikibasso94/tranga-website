@@ -9,6 +9,9 @@ RUN apk add --no-cache python3 make g++
 COPY website/* /app
 RUN npm install -g npm
 RUN npm install
+# npm blocks install/postinstall scripts of deps not explicitly allow-listed by default;
+# better-sqlite3's native addon is never compiled without approving and rebuilding it.
+RUN npm install-scripts approve --all && npm rebuild
 ENV NUXT_PUBLIC_OPEN_FETCH_API_BASE_URL="/api/"
 RUN npm run generate
 
