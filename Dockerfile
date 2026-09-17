@@ -4,10 +4,10 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 
 COPY website/* /app
-RUN npm -dd install -g npm
-RUN npm -dd install
+RUN npm install -g npm
+RUN npm install
 ENV NUXT_PUBLIC_OPEN_FETCH_API_BASE_URL="/api/"
-RUN npm -dd run generate
+RUN npm run generate
 
 # Serve stage
 FROM nginx:alpine3.22-slim
