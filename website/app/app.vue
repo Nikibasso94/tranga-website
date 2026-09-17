@@ -26,6 +26,12 @@
             </template>
             <template #right>
                 <UButton
+                    icon="i-lucide-download"
+                    to="/downloads"
+                    :disabled="$route.fullPath.startsWith('/downloads')"
+                    variant="soft"
+                    color="secondary" />
+                <UButton
                     icon="i-lucide-brick-wall-shield"
                     :to="`/actions?return=${$route.fullPath}`"
                     :disabled="$route.fullPath.startsWith('/actions')"

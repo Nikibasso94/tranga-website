@@ -97,7 +97,9 @@
 import type { components } from '#open-fetch-schemas/api';
 type ChapterFilterRecord = components['schemas']['ChapterFilterRecord'];
 
-const filter = ref<Partial<ChapterFilterRecord>>({});
+const initialDownloadedQuery = useRoute().query.downloaded;
+const initialDownloaded = initialDownloadedQuery === 'false' ? false : initialDownloadedQuery === 'true' ? true : undefined;
+const filter = ref<Partial<ChapterFilterRecord>>({ downloaded: initialDownloaded });
 
 const pagination = ref({ pageIndex: 0, pageSize: 10 });
 
