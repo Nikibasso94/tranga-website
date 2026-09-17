@@ -3,6 +3,9 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 
+# better-sqlite3 (used by @nuxt/content) needs to compile a native addon on Alpine/musl
+RUN apk add --no-cache python3 make g++
+
 COPY website/* /app
 RUN npm install -g npm
 RUN npm install
