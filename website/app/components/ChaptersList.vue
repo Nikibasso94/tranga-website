@@ -79,9 +79,7 @@
                                     :icon="mangaconnectorId.useForDownload ? 'i-lucide-cloud-off' : 'i-lucide-cloud-download'"
                                     variant="ghost"
                                     loading-auto
-                                    @click="
-                                        setDownload(chapter.key, mangaconnectorId.mangaConnectorName, !mangaconnectorId.useForDownload)
-                                    " />
+                                    @click="setDownload(mangaconnectorId.key, !mangaconnectorId.useForDownload)" />
                             </UTooltip>
                         </div>
                         <!-- TODO: Not implemented yet -->
@@ -108,6 +106,7 @@ export interface ChaptersListProps {
 }
 const props = defineProps<ChaptersListProps>();
 const { $api } = useNuxtApp();
+const config = useRuntimeConfig();
 
 const { data, refresh } = useAsyncData(
     FetchKeys.Chapters.All,
@@ -121,10 +120,13 @@ const { data, refresh } = useAsyncData(
     { watch: [pagination.value, filter.value], lazy: true, server: false }
 );
 
-const setDownload = async (chapterId: string, mangaConnector: string, requested: boolean) => {
-    await $api('/v2/Chapters/{ChapterId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
+// Not in the (upstream) typed OpenAPI schema yet - see the raw $fetch calls in useDownloadProgress.ts
+// and missing-chapters.vue for the same pattern. Keyed by the MangaConnectorId's own id (not by
+// connector name + chapter), since a Chapter can have several MangaConnectorIds from the *same*
+// connector (e.g. a stale/duplicate Mangaworld link), which a name-based lookup can't tell apart.
+const setDownload = async (mangaConnectorIdId: string, requested: boolean) => {
+    await $fetch(`${config.public.openFetch.api.baseURL}v2/Chapters/ConnectorId/${mangaConnectorIdId}/DownloadFrom/${requested}`, {
         method: 'PATCH',
-        path: { ChapterId: chapterId, MangaConnectorName: mangaConnector, IsRequested: requested },
     });
     await refresh();
 };
