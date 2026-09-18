@@ -10,20 +10,38 @@
                 backdrop-filter: blur(2px) brightness(70%);
                 -webkit-backdrop-filter: blur(2px) brightness(70%);
             ">
-            <p class="p-3 max-sm:text-sm text-xl font-semibold max-h-full overflow-clip text-shadow-lg text-white">
+            <p class="p-3 pb-0 max-sm:text-sm text-xl font-semibold max-h-full overflow-clip text-shadow-lg text-white">
                 {{ manga?.name }}
+            </p>
+            <p v-if="chapterProgress !== null" class="px-3 max-sm:text-xs text-sm font-medium text-white/90 text-shadow-lg">
+                {{ (manga as MinimalManga).downloadedChapters }} / {{ (manga as MinimalManga).totalChapters }} chapters
             </p>
         </div>
         <LazyNuxtImg
             :src="`${$config.public.openFetch.api.baseURL}v2/Manga/${manga.key}/Cover/Medium`"
             class="w-full h-full object-cover" />
+        <UTooltip v-if="chapterProgress !== null" :text="`${(manga as MinimalManga).downloadedChapters} / ${(manga as MinimalManga).totalChapters} chapters downloaded`">
+            <UProgress
+                :model-value="chapterProgress"
+                size="md"
+                :color="chapterProgress === 100 ? 'success' : 'primary'"
+                class="absolute bottom-0 left-0 w-full"
+                :ui="{ base: 'bg-black/50' }" />
+        </UTooltip>
     </div>
 </template>
 
 <script setup lang="ts">
 import type { components } from '#open-fetch-schemas/api';
 type Manga = components['schemas']['Manga'];
-type MinimalManga = components['schemas']['MinimalManga'];
+// Not in the (upstream) OpenAPI schema yet - the totals are returned by our fork's /v2/Manga endpoints
+// but the typed client's schema is generated from upstream's repo, see nuxt.config.ts.
+type MinimalManga = components['schemas']['MinimalManga'] & { totalChapters: number; downloadedChapters: number };
 
-defineProps<{ manga: Manga | MinimalManga; blur?: boolean }>();
+const props = defineProps<{ manga: Manga | MinimalManga; blur?: boolean }>();
+
+const chapterProgress = computed(() => {
+    if (!('totalChapters' in props.manga) || !props.manga.totalChapters) return null;
+    return Math.round((props.manga.downloadedChapters / props.manga.totalChapters) * 100);
+});
 </script>
