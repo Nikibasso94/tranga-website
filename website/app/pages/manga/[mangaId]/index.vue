@@ -45,7 +45,7 @@
             <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge?return=${$route.fullPath}`" color="secondary"
                 >Merge</UButton
             >
-            <UButton variant="soft" color="warning" icon="i-lucide-trash" @click="remove" />
+            <UButton variant="soft" color="warning" icon="i-lucide-trash" @click="deleteMangaModal.open({ mangaId, mangaName: manga?.name })" />
             <UTooltip text="Reload" :kbds="['meta', 'R']">
                 <UButton variant="soft" color="secondary" icon="i-lucide-refresh-ccw" :loading="refreshingData" @click="refreshData" />
             </UTooltip>
@@ -54,10 +54,14 @@
 </template>
 
 <script setup lang="ts">
+import { LazyDeleteMangaModal } from '#components';
 import MangaDetailPage from '~/components/MangaDetailPage.vue';
 const { $api } = useNuxtApp();
+const overlay = useOverlay();
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
+
+const deleteMangaModal = overlay.create(LazyDeleteMangaModal);
 
 const flashDownloading = route.hash.substring(1) == 'download';
 
@@ -78,12 +82,6 @@ const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean
         path: { MangaId: mangaId, MangaConnectorName: MangaConnectorName, IsRequested: IsRequested },
     });
     await refreshNuxtData(FetchKeys.Manga.Id(mangaId));
-};
-
-const remove = async () => {
-    await $api('/v2/Manga/{MangaId}', { method: 'DELETE', path: { MangaId: mangaId } });
-    await refreshNuxtData(FetchKeys.Manga.All);
-    navigateTo('/');
 };
 
 const refreshingData = ref(false);
