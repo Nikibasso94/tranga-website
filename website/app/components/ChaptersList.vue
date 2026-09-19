@@ -82,8 +82,17 @@
                                     @click="setDownload(mangaconnectorId.key, !mangaconnectorId.useForDownload)" />
                             </UTooltip>
                         </div>
-                        <!-- TODO: Not implemented yet -->
-                        <UButton variant="outline" color="secondary" class="ml-auto" disabled>Force (re)download</UButton>
+                        <UTooltip :text="hasActiveSource(chapter) ? 'Delete and re-download this chapter' : 'No download source set for this chapter'">
+                            <UButton
+                                variant="outline"
+                                color="secondary"
+                                class="ml-auto"
+                                loading-auto
+                                :disabled="!hasActiveSource(chapter)"
+                                @click="forceRedownload(chapter.key)">
+                                Force (re)download
+                            </UButton>
+                        </UTooltip>
                     </div>
                 </template>
             </UPageCard>
@@ -127,6 +136,16 @@ const { data, refresh } = useAsyncData(
 const setDownload = async (mangaConnectorIdId: string, requested: boolean) => {
     await $fetch(`${config.public.openFetch.api.baseURL}v2/Chapters/ConnectorId/${mangaConnectorIdId}/DownloadFrom/${requested}`, {
         method: 'PATCH',
+    });
+    await refresh();
+};
+
+type ChapterListItem = NonNullable<typeof data.value>['data'][number];
+const hasActiveSource = (chapter: ChapterListItem) => chapter.mangaConnectorIds.some((m) => m.useForDownload);
+
+const forceRedownload = async (chapterId: string) => {
+    await $fetch(`${config.public.openFetch.api.baseURL}v2/Chapters/${chapterId}/ForceRedownload`, {
+        method: 'POST',
     });
     await refresh();
 };
