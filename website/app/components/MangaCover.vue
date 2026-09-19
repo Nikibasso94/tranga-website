@@ -20,12 +20,14 @@
         <UTooltip
             v-if="chapterProgress !== null"
             :text="`${(manga as MinimalManga).downloadedChapters} / ${(manga as MinimalManga).totalChapters} chapters downloaded`">
-            <div class="absolute bottom-0 left-0 w-full h-4 bg-black/60">
+            <div class="absolute bottom-0 left-0 w-full h-5 bg-black/60">
                 <div
                     class="h-full"
-                    :class="chapterProgress === 100 ? 'bg-success' : 'bg-error'"
+                    :class="isComplete ? 'bg-success' : 'bg-error'"
                     :style="{ width: chapterProgress + '%' }" />
-                <span class="absolute inset-0 flex items-center justify-center text-[10px] leading-none font-semibold text-white text-shadow-lg">
+                <span
+                    class="absolute inset-0 flex items-center justify-center text-xs leading-none font-bold text-white"
+                    style="text-shadow: 0 1px 3px rgb(0 0 0 / 0.9), 0 0 2px rgb(0 0 0 / 0.9)">
                     {{ (manga as MinimalManga).downloadedChapters }} / {{ (manga as MinimalManga).totalChapters }}
                 </span>
             </div>
@@ -46,4 +48,8 @@ const chapterProgress = computed(() => {
     if (!('totalChapters' in props.manga) || !props.manga.totalChapters) return null;
     return Math.round((props.manga.downloadedChapters / props.manga.totalChapters) * 100);
 });
+// Rounding can push e.g. 1193/1195 (99.8%) up to a misleading 100 - compare the exact counts instead.
+const isComplete = computed(
+    () => 'totalChapters' in props.manga && props.manga.downloadedChapters === props.manga.totalChapters
+);
 </script>
