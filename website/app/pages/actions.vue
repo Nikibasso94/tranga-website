@@ -47,7 +47,7 @@
                         :to="`/manga/${row.original.mangaId}?return=${$route.fullPath}`"
                         variant="ghost"
                         color="primary"
-                        >Manga</UButton
+                        >{{ row.original.mangaName ?? 'Manga' }}</UButton
                     >
                 </template>
                 <template #chapter-cell="{ row }">
@@ -56,7 +56,7 @@
                         :to="`/manga/${row.original.mangaId}?return=${$route.fullPath}#${row.original.chapterId}`"
                         variant="ghost"
                         color="secondary"
-                        >Chapter</UButton
+                        >{{ row.original.chapterNumber ? `Ch. ${row.original.chapterNumber}` : 'Chapter' }}</UButton
                     >
                 </template>
                 <template #additional-cell="{ row }">
