@@ -10,23 +10,25 @@
                 backdrop-filter: blur(2px) brightness(70%);
                 -webkit-backdrop-filter: blur(2px) brightness(70%);
             ">
-            <p class="p-3 pb-0 max-sm:text-sm text-xl font-semibold max-h-full overflow-clip text-shadow-lg text-white">
+            <p class="p-3 max-sm:text-sm text-xl font-semibold max-h-full overflow-clip text-shadow-lg text-white">
                 {{ manga?.name }}
-            </p>
-            <p v-if="chapterProgress !== null" class="px-3 max-sm:text-xs text-sm font-medium text-white/90 text-shadow-lg">
-                {{ (manga as MinimalManga).downloadedChapters }} / {{ (manga as MinimalManga).totalChapters }} chapters
             </p>
         </div>
         <LazyNuxtImg
             :src="`${$config.public.openFetch.api.baseURL}v2/Manga/${manga.key}/Cover/Medium`"
             class="w-full h-full object-cover" />
-        <UTooltip v-if="chapterProgress !== null" :text="`${(manga as MinimalManga).downloadedChapters} / ${(manga as MinimalManga).totalChapters} chapters downloaded`">
-            <UProgress
-                :model-value="chapterProgress"
-                size="md"
-                :color="chapterProgress === 100 ? 'success' : 'primary'"
-                class="absolute bottom-0 left-0 w-full"
-                :ui="{ base: 'bg-black/50' }" />
+        <UTooltip
+            v-if="chapterProgress !== null"
+            :text="`${(manga as MinimalManga).downloadedChapters} / ${(manga as MinimalManga).totalChapters} chapters downloaded`">
+            <div class="absolute bottom-0 left-0 w-full h-4 bg-black/60">
+                <div
+                    class="h-full"
+                    :class="chapterProgress === 100 ? 'bg-success' : 'bg-error'"
+                    :style="{ width: chapterProgress + '%' }" />
+                <span class="absolute inset-0 flex items-center justify-center text-[10px] leading-none font-semibold text-white text-shadow-lg">
+                    {{ (manga as MinimalManga).downloadedChapters }} / {{ (manga as MinimalManga).totalChapters }}
+                </span>
+            </div>
         </UTooltip>
     </div>
 </template>
