@@ -29,6 +29,7 @@ This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-w
 - Confirmation dialog before deleting a Manga, with an explicit choice between deleting its downloaded files or just removing it from the library and keeping them
 - The Actions (audit log) page now shows the Manga name and chapter number instead of generic "Manga"/"Chapter" links
 - Tooltips added to icon-only nav buttons (Downloads, Actions) that previously had no label at all
+- Search box and an A-Z jump index on the home page to quickly find a monitored manga in a large library
 
 **Fixes**
 - Fixed the Downloads page never showing live progress: nginx wasn't proxying the SignalR WebSocket upgrade for the download-progress hub
