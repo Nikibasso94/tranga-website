@@ -17,7 +17,26 @@
   </table>
 </div>
 
+<!-- FORK CHANGES -->
+## Changes in this fork
 
+This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-website](https://github.com/C9Glax/tranga-website), with the following fixes and additions on top of upstream (pairs with the matching [tranga fork](https://github.com/Nikibasso94/tranga)):
+
+**New features**
+- Live "Downloads" view showing per-chapter download progress in real time, and a "Missing Chapters" view per manga
+- Per-Manga chapter download progress bar on the main list, showing downloaded/total count directly on the bar (red while incomplete, green when done)
+- "Force (re)download" button for a Chapter, wired up to actually delete and re-download it
+- Confirmation dialog before deleting a Manga, with an explicit choice between deleting its downloaded files or just removing it from the library and keeping them
+- The Actions (audit log) page now shows the Manga name and chapter number instead of generic "Manga"/"Chapter" links
+- Tooltips added to icon-only nav buttons (Downloads, Actions) that previously had no label at all
+
+**Fixes**
+- Fixed the Downloads page never showing live progress: nginx wasn't proxying the SignalR WebSocket upgrade for the download-progress hub
+- Fixed the chapter download-source toggle acting on the wrong link when a chapter has two links from the same connector (pairs with the backend fix)
+- Fixed a broken `npm` invocation in the Dockerfile, and added the build toolchain + native-module approval needed to compile `better-sqlite3` on Alpine
+
+**Infrastructure**
+- Docker images are published to `ghcr.io/nikibasso94/tranga-web` instead of the upstream Docker Hub namespace
 
 <!-- ABOUT THE PROJECT -->
 ## Screenshots
