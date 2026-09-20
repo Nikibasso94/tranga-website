@@ -3,6 +3,7 @@
         class="grid min-sm:grid-cols-[repeat(auto-fill,_minmax(var(--mangacover-width),_1fr))] max-sm:grid-cols-[repeat(auto-fill,_minmax(var(--mangacover-width-sm),_1fr))] gap-4">
         <MangaCard
             v-for="(m, i) in manga"
+            :id="m.key"
             :key="m.key"
             :manga="m"
             :expanded="i === expanded"
