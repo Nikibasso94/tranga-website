@@ -50,6 +50,23 @@
             </UCard>
             <UCard v-if="settingsStatus === 'success'">
                 <template #header>
+                    <h1>Performance</h1>
+                </template>
+                <div class="flex flex-col gap-4 max-w-xs">
+                    <UFormField
+                        label="Concurrent chapter downloads"
+                        description="How many chapters can download at the same time. Lower this if downloads fail with too many chapters running at once.">
+                        <UInputNumber v-model="maxConcurrentDownloads" :min="1" @update:model-value="onMaxConcurrentDownloadsChange" />
+                    </UFormField>
+                    <UFormField
+                        label="Concurrent workers"
+                        description="How many background jobs (downloads, checks, refreshes, ...) can run at the same time in total.">
+                        <UInputNumber v-model="maxConcurrentWorkers" :min="1" @update:model-value="onMaxConcurrentWorkersChange" />
+                    </UFormField>
+                </div>
+            </UCard>
+            <UCard v-if="settingsStatus === 'success'">
+                <template #header>
                     <h1>Maintenance</h1>
                 </template>
                 <div class="flex gap-2">
@@ -90,6 +107,7 @@ import FileLibraries from '~/components/FileLibraries.vue';
 import { refreshNuxtData } from '#app';
 const overlay = useOverlay();
 const { $api } = useNuxtApp();
+const config = useRuntimeConfig();
 
 const addLibraryModal = overlay.create(LazyAddLibraryModal);
 const komgaModal = overlay.create(LazyKomgaModal);
@@ -134,7 +152,27 @@ const onKavitaClick = async () => {
     }
 };
 
-const { status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All, server: false });
+const { data: settings, status: settingsStatus } = useApi('/v2/Settings', { key: FetchKeys.Settings.All, server: false });
+
+// MaxConcurrentDownloads/MaxConcurrentWorkers are fork-specific endpoints not present in the
+// upstream OpenAPI schema the typed $api client is generated from, so they're called via raw $fetch.
+const maxConcurrentDownloads = ref<number>();
+const maxConcurrentWorkers = ref<number>();
+watch(
+    settings,
+    (value) => {
+        if (!value) return;
+        maxConcurrentDownloads.value = value.maxConcurrentDownloads;
+        maxConcurrentWorkers.value = value.maxConcurrentWorkers;
+    },
+    { immediate: true },
+);
+const onMaxConcurrentDownloadsChange = async (value: number) => {
+    await $fetch(`${config.public.openFetch.api.baseURL}/v2/Settings/MaxConcurrentDownloads/${value}`, { method: 'PATCH' });
+};
+const onMaxConcurrentWorkersChange = async (value: number) => {
+    await $fetch(`${config.public.openFetch.api.baseURL}/v2/Settings/MaxConcurrentWorkers/${value}`, { method: 'PATCH' });
+};
 
 const { data: stats } = useApi('/v2/Stats', { server: false });
 const deCamel = (camel: string): string =>
