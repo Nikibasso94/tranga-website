@@ -1,18 +1,5 @@
 <template>
     <div class="flex flex-col items-center justify-center min-h-[80vh] gap-6">
-        <div class="flex gap-2 items-center">
-            <img src="/blahaj.png" class="h-12" alt="Blahaj" />
-            <p
-                style="
-                    background: linear-gradient(110deg, var(--color-pink), var(--color-blue));
-                    background-clip: text;
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                "
-                class="font-bold text-4xl">
-                Tranga
-            </p>
-        </div>
         <UCard class="w-full max-w-sm">
             <form class="flex flex-col gap-4" @submit.prevent="login">
                 <UFormField label="Username">

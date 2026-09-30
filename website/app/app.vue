@@ -48,7 +48,7 @@
                 </UButton>
                 <UColorModeButton color="secondary" />
                 <UButton icon="i-lucide-settings" variant="ghost" to="/settings" color="secondary" />
-                <UTooltip v-if="authEnabled" text="Log out">
+                <UTooltip v-if="authEnabled && authenticated" text="Log out">
                     <UButton icon="i-lucide-log-out" variant="ghost" color="secondary" @click="logout" />
                 </UTooltip>
             </template>
@@ -71,11 +71,23 @@ const items = computed<NavigationMenuItem[]>(() => [
 ]);
 
 const authEnabled = ref(false);
-onMounted(async () => {
+const authenticated = ref(false);
+const route = useRoute();
+const refreshAuthState = async () => {
     authEnabled.value = await $fetch<boolean>('/v2/Auth/Enabled').catch(() => false);
-});
+    authenticated.value = authEnabled.value
+        ? await $fetch('/v2/Auth/Session', { credentials: 'include' })
+              .then(() => true)
+              .catch(() => false)
+        : false;
+};
+onMounted(refreshAuthState);
+// The login page itself doesn't reload the app, so re-check right after a successful login too -
+// otherwise the logout button stays hidden until the next full navigation.
+watch(() => route.path, refreshAuthState);
 const logout = async () => {
     await $fetch('/v2/Auth/Logout', { method: 'POST', credentials: 'include' });
+    authenticated.value = false;
     await navigateTo('/login');
 };
 </script>
