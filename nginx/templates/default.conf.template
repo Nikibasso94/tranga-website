@@ -8,7 +8,13 @@ server {
 
     access_log  /dev/stdout  main;
     error_log  /dev/stderr;
-    
+
+    # nginx only knows its own internal port (80) - it has no idea Docker maps it to something
+    # else externally (e.g. 9555), so its automatic redirects (like adding a trailing slash) would
+    # otherwise build an absolute URL with the wrong port. Relative redirects let the browser resolve
+    # them against whatever host:port is actually in the address bar.
+    absolute_redirect off;
+
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
