@@ -32,6 +32,7 @@ This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-w
 - Search box and an A-Z jump index on the home page to quickly find a monitored manga in a large library
 - Performance settings card to change max concurrent chapter downloads/workers from the web UI, instead of editing `settings.json` by hand and restarting
 - Login page for the backend fork's optional username/password authentication, with a logout button that only appears when login is actually enabled
+- Installable as a mobile PWA (manifest + icons), so it can be added to a phone's home screen with its own icon
 
 **Fixes**
 - Fixed the Downloads page never showing live progress: nginx wasn't proxying the SignalR WebSocket upgrade for the download-progress hub
