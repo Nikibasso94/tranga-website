@@ -8,12 +8,12 @@
             @keydown.esc="search = ''" />
         <div class="flex gap-2 items-start">
             <MangaCardList :manga="filteredManga" class="flex-1 min-md:mx-4 max-md:mx-0 mt-2" @click="(m) => navigateTo(`/manga/${m.key}`)" />
-            <div class="hidden sm:flex flex-col items-center sticky top-20 shrink-0 pt-2">
+            <div class="flex flex-col items-center sticky top-20 shrink-0 pt-2">
                 <button
                     v-for="letter in letters"
                     :key="letter"
                     type="button"
-                    class="text-xs w-5 leading-5 text-center rounded hover:bg-elevated disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
+                    class="text-xs max-sm:text-[10px] w-5 max-sm:w-4 leading-5 max-sm:leading-4 text-center rounded hover:bg-elevated disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
                     :disabled="!availableLetters.has(letter)"
                     @click="scrollToLetter(letter)">
                     {{ letter }}
