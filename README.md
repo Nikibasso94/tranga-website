@@ -29,6 +29,7 @@ This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-w
 - Confirmation dialog before deleting a Manga, with an explicit choice between deleting its downloaded files or just removing it from the library and keeping them
 - The Actions (audit log) page now shows the Manga name and chapter number instead of generic "Manga"/"Chapter" links
 - Tooltips added to icon-only nav buttons (Downloads, Actions) that previously had no label at all
+- Chapter download-status icon is now colored green/red to match the connector icon and the manga progress bar, instead of only differing by shape
 - Search box and an A-Z jump index on the home page to quickly find a monitored manga in a large library
 - Performance settings card to change max concurrent chapter downloads/workers from the web UI, instead of editing `settings.json` by hand and restarting
 - Login page for the backend fork's optional username/password authentication, with a logout button that only appears when login is actually enabled
