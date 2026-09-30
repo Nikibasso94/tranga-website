@@ -36,6 +36,7 @@ This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-w
 - Fixed the Downloads page never showing live progress: nginx wasn't proxying the SignalR WebSocket upgrade for the download-progress hub
 - Fixed the chapter download-source toggle acting on the wrong link when a chapter has two links from the same connector (pairs with the backend fix)
 - Fixed a broken `npm` invocation in the Dockerfile, and added the build toolchain + native-module approval needed to compile `better-sqlite3` on Alpine
+- Fixed nginx's automatic redirects (e.g. adding a trailing slash) dropping the external port when the site is exposed through a different host port than nginx's own internal one (the normal Docker Compose setup) - "open in new tab" on such a link used to land on the wrong port
 
 **Infrastructure**
 - Docker images are published to `ghcr.io/nikibasso94/tranga-web` instead of the upstream Docker Hub namespace
