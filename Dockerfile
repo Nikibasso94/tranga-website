@@ -6,7 +6,7 @@ WORKDIR /app
 # better-sqlite3 (used by @nuxt/content) needs to compile a native addon on Alpine/musl
 RUN apk add --no-cache python3 make g++
 
-COPY website/* /app
+COPY website/ /app/
 RUN npm install -g npm
 RUN npm install
 # npm blocks install/postinstall scripts of deps not explicitly allow-listed by default;
