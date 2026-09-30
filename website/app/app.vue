@@ -48,6 +48,9 @@
                 </UButton>
                 <UColorModeButton color="secondary" />
                 <UButton icon="i-lucide-settings" variant="ghost" to="/settings" color="secondary" />
+                <UTooltip v-if="authEnabled" text="Log out">
+                    <UButton icon="i-lucide-log-out" variant="ghost" color="secondary" @click="logout" />
+                </UTooltip>
             </template>
         </UHeader>
         <UMain>
@@ -66,4 +69,13 @@ const items = computed<NavigationMenuItem[]>(() => [
     { label: 'Website', to: 'https://github.com/C9Glax/tranga-website', icon: 'i-lucide-github', target: '_blank' },
     { label: 'Swagger', to: `${useRuntimeConfig().public.openFetch.api.baseURL}swagger`, icon: 'i-lucide-book-open', target: '_blank' },
 ]);
+
+const authEnabled = ref(false);
+onMounted(async () => {
+    authEnabled.value = await $fetch<boolean>('/v2/Auth/Enabled').catch(() => false);
+});
+const logout = async () => {
+    await $fetch('/v2/Auth/Logout', { method: 'POST', credentials: 'include' });
+    await navigateTo('/login');
+};
 </script>
