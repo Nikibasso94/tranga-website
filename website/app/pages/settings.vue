@@ -63,6 +63,17 @@
                         description="How many background jobs (downloads, checks, refreshes, ...) can run at the same time in total.">
                         <UInputNumber v-model="maxConcurrentWorkers" :min="1" @update:model-value="onMaxConcurrentWorkersChange" />
                     </UFormField>
+                    <UFormField
+                        :label="`Check for new chapters every ${checkIntervalLabels[checkIntervalIndex]}`"
+                        description="How often monitored manga are checked for newly-released chapters.">
+                        <USlider
+                            v-model="checkIntervalIndex"
+                            :min="0"
+                            :max="checkIntervalMinutesOptions.length - 1"
+                            :step="1"
+                            class="max-w-50"
+                            @update:model-value="onCheckIntervalChange" />
+                    </UFormField>
                 </div>
             </UCard>
             <UCard v-if="settingsStatus === 'success'">
@@ -172,6 +183,24 @@ const onMaxConcurrentDownloadsChange = async (value: number) => {
 };
 const onMaxConcurrentWorkersChange = async (value: number) => {
     await $fetch(`${config.public.openFetch.api.baseURL}/v2/Settings/MaxConcurrentWorkers/${value}`, { method: 'PATCH' });
+};
+
+const checkIntervalMinutesOptions = [30, 60, 120, 180];
+const checkIntervalLabels = ['30m', '1h', '2h', '3h'];
+const checkIntervalIndex = ref(3);
+onMounted(async () => {
+    const minutes = await $fetch<number>(`${config.public.openFetch.api.baseURL}/v2/Settings/CheckForNewChaptersIntervalMinutes`).catch(
+        () => 180,
+    );
+    const closest = checkIntervalMinutesOptions.reduce((closestIdx, option, idx) =>
+        Math.abs(option - minutes) < Math.abs(checkIntervalMinutesOptions[closestIdx]! - minutes) ? idx : closestIdx, 0);
+    checkIntervalIndex.value = closest;
+});
+const onCheckIntervalChange = async (index: number) => {
+    await $fetch(
+        `${config.public.openFetch.api.baseURL}/v2/Settings/CheckForNewChaptersIntervalMinutes/${checkIntervalMinutesOptions[index]}`,
+        { method: 'PATCH' },
+    );
 };
 
 const { data: stats } = useApi('/v2/Stats', { server: false });
