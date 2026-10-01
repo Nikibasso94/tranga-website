@@ -33,10 +33,7 @@
                 </p>
             </template>
         </UPageSection>
-        <MangaCardList
-            :manga="searchResult"
-            class="overflow-y-scroll h-full pb-70"
-            @click="(m) => navigateTo(`/manga/${m.key}?return=${$route.fullPath}#download`)" />
+        <MangaCardList :manga="searchResult" class="overflow-y-scroll h-full pb-70" @click="selectResult" />
     </TrangaPage>
 </template>
 
@@ -69,6 +66,22 @@ const isUrl = (input: string): boolean => {
 const connectorClick = (c: MangaConnector) => {
     connector.value = c;
     performSearch();
+};
+
+const route = useRoute();
+// Searching only previews results (see SearchController.SearchManga) - actually adding the Manga to
+// the library happens here, when the user picks one specific result, not for every search match.
+const selecting = ref(false);
+const selectResult = async (m: MinimalManga) => {
+    const websiteUrl = m.mangaConnectorIds[0]?.websiteUrl;
+    if (!websiteUrl || selecting.value) return;
+    selecting.value = true;
+    try {
+        const { data } = await useApi('/v2/Search', { query: { url: JSON.stringify(websiteUrl) } });
+        if (data.value) await navigateTo(`/manga/${data.value.key}?return=${route.fullPath}#download`);
+    } finally {
+        selecting.value = false;
+    }
 };
 
 const searchResult = useState<MinimalManga[]>(() => []);
