@@ -38,6 +38,7 @@ This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-w
 - The home page's A-Z jump index is now shown on mobile too, instead of only on desktop
 
 **Fixes**
+- Fixed searching for a Manga by name silently adding every search result to the library instead of only the one actually clicked (pairs with the backend fix)
 - Fixed the Downloads page never showing live progress: nginx wasn't proxying the SignalR WebSocket upgrade for the download-progress hub
 - Fixed the chapter download-source toggle acting on the wrong link when a chapter has two links from the same connector (pairs with the backend fix)
 - Fixed a broken `npm` invocation in the Dockerfile, and added the build toolchain + native-module approval needed to compile `better-sqlite3` on Alpine
