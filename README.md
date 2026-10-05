@@ -53,7 +53,11 @@ This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-w
 
 | ![Main Page](Screenshots/Overview.png) | ![Search](Screenshots/Search.png) | ![Manga Detail](Screenshots/MangaDetail.png) |
 |----------------------------------------|------------------------------------------|------------------------------------------------|
-| Overview                               | Search Dialog                            | Manga Detail                                   |
+| Overview, with per-manga progress and the A-Z index | Search results, before picking one to add | Manga detail, chapter list and download sources |
+
+| ![Downloads](Screenshots/Downloads.png) | ![Settings](Screenshots/Settings.png) | ![Login](Screenshots/Login.png) |
+|------------------------------------------|----------------------------------------|----------------------------------|
+| Live download progress                   | Runtime performance settings            | Optional login page               |
 
 ## About The Project
 
@@ -77,7 +81,7 @@ This project makes HTTP-requests to the [Tranga-API](https://github.com/C9Glax/t
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Go to [Tranga](https://github.com/C9Glax/tranga?tab=readme-ov-file#getting-started) and read the README there.
+Go to [this fork's `tranga` repo](https://github.com/Nikibasso94/tranga?tab=readme-ov-file#getting-started) for the full Docker Compose deploy string (API + website + database) and read the README there.
 
 <!-- CONTRIBUTING -->
 ## Contributing
