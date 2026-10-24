@@ -45,6 +45,13 @@
             <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge?return=${$route.fullPath}`" color="secondary"
                 >Merge</UButton
             >
+            <UTooltip text="Convert to EPUB (Kindle)">
+                <UButton
+                    variant="soft"
+                    color="secondary"
+                    icon="i-lucide-tablet-smartphone"
+                    @click="convertToEpubModal.open({ mangaId, mangaName: manga?.name })" />
+            </UTooltip>
             <UButton variant="soft" color="warning" icon="i-lucide-trash" @click="deleteMangaModal.open({ mangaId, mangaName: manga?.name })" />
             <UTooltip text="Reload" :kbds="['meta', 'R']">
                 <UButton variant="soft" color="secondary" icon="i-lucide-refresh-ccw" :loading="refreshingData" @click="refreshData" />
@@ -54,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { LazyDeleteMangaModal } from '#components';
+import { LazyDeleteMangaModal, LazyConvertToEpubModal } from '#components';
 import MangaDetailPage from '~/components/MangaDetailPage.vue';
 const { $api } = useNuxtApp();
 const overlay = useOverlay();
@@ -62,6 +69,7 @@ const route = useRoute();
 const mangaId = route.params.mangaId as string;
 
 const deleteMangaModal = overlay.create(LazyDeleteMangaModal);
+const convertToEpubModal = overlay.create(LazyConvertToEpubModal);
 
 const flashDownloading = route.hash.substring(1) == 'download';
 
