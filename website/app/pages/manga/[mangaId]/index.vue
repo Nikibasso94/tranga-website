@@ -45,10 +45,10 @@
             <UButton trailing-icon="i-lucide-merge" :to="`/manga/${manga?.key}/merge?return=${$route.fullPath}`" color="secondary"
                 >Merge</UButton
             >
-            <UTooltip text="Convert to EPUB (Kindle)">
+            <UTooltip :text="autoConvertToEpub ? 'Convert to EPUB (Kindle) - auto-convert is on' : 'Convert to EPUB (Kindle)'">
                 <UButton
                     variant="soft"
-                    color="secondary"
+                    :color="autoConvertToEpub ? 'primary' : 'secondary'"
                     icon="i-lucide-tablet-smartphone"
                     @click="convertToEpubModal.open({ mangaId, mangaName: manga?.name })" />
             </UTooltip>
@@ -83,6 +83,9 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
     lazy: true,
     server: false,
 });
+
+// Not in the (upstream) typed OpenAPI schema yet - see ChaptersList.vue for the same pattern.
+const autoConvertToEpub = computed(() => (manga.value as unknown as { autoConvertToEpub?: boolean } | undefined)?.autoConvertToEpub ?? false);
 
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
     await $api('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {

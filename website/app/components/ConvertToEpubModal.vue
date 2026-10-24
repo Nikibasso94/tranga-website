@@ -7,8 +7,9 @@
                     <span v-if="mangaName"
                         ><b>{{ mangaName }}</b></span
                     ><span v-else>this Manga</span>
-                    to a Kindle-compatible .epub. <b>The original .cbz files are deleted</b> once each chapter is converted - this cannot
-                    be undone. Conversion runs in the background and may take a while for Manga with many chapters.
+                    to a Kindle-compatible .epub, and keeps converting newly-downloaded chapters automatically from now on.
+                    <b>The original .cbz files are deleted</b> once each chapter is converted - this cannot be undone. Conversion runs in
+                    the background and may take a while for Manga with many chapters.
                 </p>
                 <UButton icon="i-lucide-tablet-smartphone" color="warning" variant="solid" loading-auto @click="convert">
                     Convert all chapters
@@ -29,7 +30,7 @@ const convert = async () => {
     await $fetch(`${config.public.openFetch.api.baseURL}v2/Manga/${props.mangaId}/ConvertToEpub`, {
         method: 'POST',
     });
-    await refreshNuxtData(FetchKeys.Chapters.All);
+    await refreshNuxtData([FetchKeys.Chapters.All, FetchKeys.Manga.Id(props.mangaId)]);
     emit('close', true);
 };
 </script>
