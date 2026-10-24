@@ -93,8 +93,11 @@
                     <UButton v-if="stats" to="/missing-chapters" variant="outline" color="warning" size="sm">
                         Missing Chapters: {{ stats.missingChapters }}
                     </UButton>
+                    <UButton v-if="stats" to="/epub-status" variant="outline" color="secondary" size="sm">
+                        Converted to EPUB: {{ (stats as unknown as { epubChapters: number }).epubChapters }}
+                    </UButton>
                     <template v-for="(value, name) in stats" :key="name">
-                        <UBadge v-if="name !== 'missingChapters'" variant="outline" color="neutral">
+                        <UBadge v-if="name !== 'missingChapters' && name !== 'epubChapters'" variant="outline" color="neutral">
                             {{ deCamel(name) }}: {{ value }}
                         </UBadge>
                     </template>

@@ -37,6 +37,7 @@ This is [Nikibasso94](https://github.com/Nikibasso94)'s fork of [C9Glax/tranga-w
 - Slider to change the new-chapter check interval (30m/1h/2h/3h)
 - The home page's A-Z jump index is now shown on mobile too, instead of only on desktop
 - "Convert to EPUB" button on the manga detail page, wired up to the backend fork's `ConvertToEpub` endpoint - converts every downloaded chapter to a Kindle-compatible `.epub` and keeps auto-converting newly-downloaded chapters from then on, with a confirmation dialog since it replaces the `.cbz` files on disk; the button highlights once auto-convert is active
+- "EPUB Conversion" page (linked from Settings) listing every manga with a converted/total chapter progress bar, so you can see conversion status at a glance instead of opening each manga
 
 **Fixes**
 - Fixed searching for a Manga by name silently adding every search result to the library instead of only the one actually clicked (pairs with the backend fix)
