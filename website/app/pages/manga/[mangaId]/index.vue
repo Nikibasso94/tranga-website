@@ -53,6 +53,9 @@
                     @click="convertToEpubModal.open({ mangaId, mangaName: manga?.name })" />
             </UTooltip>
             <UButton variant="soft" color="warning" icon="i-lucide-trash" @click="deleteMangaModal.open({ mangaId, mangaName: manga?.name })" />
+            <UTooltip text="Refresh chapter list from source (picks up new chapters and fixes stale links right away)">
+                <UButton variant="soft" color="secondary" icon="i-lucide-list-restart" loading-auto @click="refreshChapterList" />
+            </UTooltip>
             <UTooltip text="Reload" :kbds="['meta', 'R']">
                 <UButton variant="soft" color="secondary" icon="i-lucide-refresh-ccw" :loading="refreshingData" @click="refreshData" />
             </UTooltip>
@@ -64,6 +67,7 @@
 import { LazyDeleteMangaModal, LazyConvertToEpubModal } from '#components';
 import MangaDetailPage from '~/components/MangaDetailPage.vue';
 const { $api } = useNuxtApp();
+const config = useRuntimeConfig();
 const overlay = useOverlay();
 const route = useRoute();
 const mangaId = route.params.mangaId as string;
@@ -86,6 +90,13 @@ const { data: manga } = await useApi('/v2/Manga/{MangaId}', {
 
 // Not in the (upstream) typed OpenAPI schema yet - see ChaptersList.vue for the same pattern.
 const autoConvertToEpub = computed(() => (manga.value as unknown as { autoConvertToEpub?: boolean } | undefined)?.autoConvertToEpub ?? false);
+
+// Not in the (upstream) typed OpenAPI schema yet - see ChaptersList.vue for the same pattern.
+const refreshChapterList = async () => {
+    await $fetch(`${config.public.openFetch.api.baseURL}v2/Manga/${mangaId}/RefreshChapterList`, {
+        method: 'POST',
+    });
+};
 
 const setRequestedFrom = async (MangaConnectorName: string, IsRequested: boolean) => {
     await $api('/v2/Manga/{MangaId}/DownloadFrom/{MangaConnectorName}/{IsRequested}', {
